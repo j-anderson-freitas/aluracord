@@ -1,5 +1,7 @@
 import appConfig from '../config.json'
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
+import React from 'react';
+import {useRouter} from 'next/router'
 
 function Title(props) {
     const Tag = props.tag || 'h1';
@@ -19,46 +21,17 @@ function Title(props) {
     )
 }
 
-function GlobalStyle() {
-    return (
-      <style global jsx>{`
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          list-style: none;
-        }
-        body {
-          font-family: 'Open Sans', sans-serif;
-        }
-        /* App fit Height */ 
-        html, body, #__next {
-          min-height: 100vh;
-          display: flex;
-          flex: 1;
-        }
-        #__next {
-          flex: 1;
-        }
-        #__next > * {
-          flex: 1;
-        }
-        /* ./App fit Height */ 
-      `}</style>
-    );
-  }
-
   export default function PaginaInicial() {
-    const username = 'j-anderson-freitas';
+    const [username,setUsername] = React.useState('j-anderson-freitas')
+    const roteamento = useRouter()
   
     return (
       <>
-        <GlobalStyle />
         <Box
           styleSheet={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             backgroundColor: appConfig.theme.colors.primary[500],
-            backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/08/the-matrix-digital-rain.jpg)',
+            backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2022/01/VirtualBackground.jpg)',
             backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
           }}
         >
@@ -80,6 +53,10 @@ function GlobalStyle() {
             {/* Formulário */}
             <Box
               as="form"
+              onSubmit={function(event){
+                event.preventDefault()
+                roteamento.push(`/chat?username=${username}`)
+              }}
               styleSheet={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -92,6 +69,11 @@ function GlobalStyle() {
   
               <TextField
                 fullWidth
+                value={username}
+                onChange={function (event){
+                  const value = event.target.value
+                  setUsername(value)
+                }}
                 textFieldColors={{
                   neutral: {
                     textColor: appConfig.theme.colors.neutrals[200],
